@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Webcam from 'react-webcam';
-import { Camera, ArrowRight } from 'lucide-react';
+import { Camera, ArrowRight, Upload } from 'lucide-react';
 import Header from '../molecules/Header';
 import StepHeader from '../molecules/StepHeader';
 import CameraFrameCanvas, {
@@ -14,6 +14,7 @@ interface Step1CaptureTemplateProps {
   webcamRef: React.RefObject<Webcam | null>;
   selectedIndex: number | null;
   aspectRatio: AspectRatioType;
+  onUploadFoto:(file:File)=> void;
   onChangeAspectRatio: (ratio: AspectRatioType) => void;
   onSelectPhoto: (index: number | null) => void;
   onDeletePhoto: (index: number) => void;
@@ -26,6 +27,7 @@ export default function Step1CaptureTemplate({
   webcamRef,
   selectedIndex,
   aspectRatio,
+  onUploadFoto,
   onChangeAspectRatio,
   onSelectPhoto,
   onDeletePhoto,
@@ -34,6 +36,15 @@ export default function Step1CaptureTemplate({
 }: Step1CaptureTemplateProps) {
   const isMaxPhotos = photos.length >= 3;
   const hasPhotos = photos.length > 0;
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && onUploadFoto) {
+      onUploadFoto(file);
+      
+      e.target.value = '';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#f7f9fb] flex flex-col justify-between pb-24">
@@ -51,6 +62,14 @@ export default function Step1CaptureTemplate({
           selectedIndex={selectedIndex}
           onSelectPhoto={onSelectPhoto}
           onDeletePhoto={onDeletePhoto}
+        />
+
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/*"
+          className="hidden"
         />
 
         {/* Area Tombol Aksi */}
@@ -78,6 +97,17 @@ export default function Step1CaptureTemplate({
               ? 'Maksimal 3 Foto Tercapai'
               : `Take Photo (${photos.length}/3)`}
           </Button>
+
+          <Button
+              variant="secondary"
+              fullWidth
+              icon={<Upload className="w-5 h-5" />}
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isMaxPhotos}
+              className={isMaxPhotos ? 'opacity-50 cursor-not-allowed' : ''}
+            >
+              Upload Galeri
+            </Button>
 
           {/* Tombol Next Step (Edit & Frame) */}
           {hasPhotos && (

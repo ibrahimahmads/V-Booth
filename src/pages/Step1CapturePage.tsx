@@ -88,6 +88,18 @@ export default function Step1CapturePage() {
     setSelectedIndex(null);
   };
 
+  const handleUploadPhoto = (file: File) => {
+    if (photos.length >= 3) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result as string;
+      // Tambahkan foto baru ke state photos
+      setPhotos((prev) => [...prev, base64Image]);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleNextStep = () => {
     if (photos.length === 0) {
       toast.warning('Belum ada foto', {
@@ -106,6 +118,7 @@ export default function Step1CapturePage() {
       webcamRef={webcamRef}
       selectedIndex={selectedIndex}
       aspectRatio={aspectRatio}
+      onUploadFoto={handleUploadPhoto}
       onChangeAspectRatio={setAspectRatio}
       onSelectPhoto={(idx) => setSelectedIndex(idx)}
       onDeletePhoto={handleDeletePhoto}
