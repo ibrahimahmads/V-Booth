@@ -1,4 +1,4 @@
-import type { CreateGreetingPayload, GreetingResponse, Greetings, UpdateGreetingPayload } from "../types/greeting.types";
+import type { CreateGreetingPayload, GreetingResponse, UpdateGreetingPayload } from "../types/greeting.types";
 import { api } from "./api";
 
 // 1. Get All Greetings
@@ -14,13 +14,13 @@ export async function getGreetingById(id: string): Promise<GreetingResponse> {
 }
 
 // 3. Create Greeting (Multipart Form Data)
-export async function createGreeting(payload: CreateGreetingPayload,onProgress?: (percent: number) => void): Promise<Greetings> {
+export async function createGreeting(payload: CreateGreetingPayload,onProgress?: (percent: number) => void): Promise<GreetingResponse> {
   const formData = new FormData();
   formData.append("guestName", payload.guestName);
   formData.append("photo", payload.photo);
   formData.append("audio", payload.audio);
 
-  const res = await api.post<Greetings>("/greetings", formData, {
+  const res = await api.post<GreetingResponse>("/greetings", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

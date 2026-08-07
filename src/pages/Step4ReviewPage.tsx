@@ -48,8 +48,6 @@ export default function Step4ReviewPage() {
         audio: recordedAudio,
       });
 
-      console.log(response);
-
       if (response && response.id) {
       setStoredGreetingId(response.id);
     }

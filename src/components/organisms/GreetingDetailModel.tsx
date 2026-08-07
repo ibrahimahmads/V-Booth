@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, Download, Share2 } from 'lucide-react';
 import AudioPreviewCard from './AudioPreviewCard';
 import type { GreetingResponse } from '../../types/greeting.types';
-// import { useGreetingFormStore } from '../../stores/useGreetingStore';
+import Button from '../atoms/Button';
+import { downloadGreetingPhoto } from '../../utils/helper/download';
 
 interface GreetingDetailModalProps {
   isOpen: boolean;
@@ -15,7 +16,6 @@ export default function GreetingDetailModal({
   onClose,
   greeting,
 }: GreetingDetailModalProps) {
-  // const {audioDuration } = useGreetingFormStore();
   // Lock scroll background body ketika modal terbuka agar tidak 'ghost scrolling'
   useEffect(() => {
     if (isOpen) {
@@ -31,11 +31,6 @@ export default function GreetingDetailModal({
   if (!isOpen || !greeting) return null;
 
   return (
-    /* 
-      1. FIX Z-INDEX & OVERLAY CONTAINER
-      Gunakan z-[100] atau z-50 agar PASTI berada di atas BottomNav (z-40/z-30)
-      Gunakan flex items-end (mobile) atau items-center (desktop)
-    */
     <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-xs transition-opacity animate-in fade-in">
       
       {/* Backdrop Clickable untuk Tutup Modal */}
@@ -85,6 +80,25 @@ export default function GreetingDetailModal({
                 Tamu ini tidak meninggalkan pesan suara.
               </p>
             )}
+          </div>
+          <div className="pt-3 grid grid-cols-2 gap-3 border-t border-slate-100">
+            {/* Tombol Download */}
+            <Button
+              variant="primary"
+              fullWidth
+              onClick={()=>downloadGreetingPhoto(greeting.id)}
+              icon={<Download className="w-4 h-4" />}
+            >
+              Download Foto 
+            </Button>
+
+            <Button
+              variant="secondary"
+              fullWidth
+              icon={<Share2 className="w-4 h-4" />}
+            >
+              Bagikan
+            </Button>
           </div>
         </div>
 
