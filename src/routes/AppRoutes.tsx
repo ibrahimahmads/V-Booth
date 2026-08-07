@@ -7,6 +7,7 @@ import Step4ReviewPage from '../pages/Step4ReviewPage';
 import SuccessPage from '../pages/SuccessPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import EditGreetingPage from '../pages/EditGreetingPage';
+import GreetingDetailPage from '../pages/GreetingDetailPage';
 
 export default function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ export default function AppRoutes() {
       <Route path="/booth/step-3" element={<Step3AudioPage />} />
       <Route path="/booth/step-4" element={<Step4ReviewPage />} />
       <Route path="/booth/edit" element={<EditGreetingPage />} />
+      <Route path="/greeting/:id" element={<GreetingDetailPage />} />
 
       <Route path="/booth/success" element={<SuccessPage />} />
 

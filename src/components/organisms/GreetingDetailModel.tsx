@@ -4,6 +4,7 @@ import AudioPreviewCard from './AudioPreviewCard';
 import type { GreetingResponse } from '../../types/greeting.types';
 import Button from '../atoms/Button';
 import { downloadGreetingPhoto } from '../../utils/helper/download';
+import { shareGreeting } from '../../utils/helper/share';
 
 interface GreetingDetailModalProps {
   isOpen: boolean;
@@ -29,6 +30,20 @@ export default function GreetingDetailModal({
   }, [isOpen]);
 
   if (!isOpen || !greeting) return null;
+  // Handler Download
+    const handleDownload = () => {
+      if (greeting.id) downloadGreetingPhoto(greeting.id);
+    };
+  
+    // Handler Share
+    const handleShare = () => {
+      if (greeting) {
+        shareGreeting({
+          greetingId: greeting.id,
+          guestName: greeting.guestName,
+        });
+      }
+    };
 
   return (
     <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-xs transition-opacity animate-in fade-in">
@@ -86,7 +101,7 @@ export default function GreetingDetailModal({
             <Button
               variant="primary"
               fullWidth
-              onClick={()=>downloadGreetingPhoto(greeting.id)}
+              onClick={handleDownload}
               icon={<Download className="w-4 h-4" />}
             >
               Download Foto 
@@ -95,6 +110,7 @@ export default function GreetingDetailModal({
             <Button
               variant="secondary"
               fullWidth
+              onClick={handleShare}
               icon={<Share2 className="w-4 h-4" />}
             >
               Bagikan
