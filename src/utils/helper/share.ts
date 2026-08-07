@@ -15,20 +15,22 @@ export const shareGreeting = async ({ greetingId, guestName }: ShareDataProps) =
     url: shareUrl,
   };
 
-  // 1. Cek Apakah Browser Mendukung Web Share API (HP/Mobile Browser)
-  if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+
+  // 2. Hanya jalankan Web Share API jika benar-benar di Mobile dan didukung browser
+  if (isMobile && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
     try {
       await navigator.share(shareData);
-      // Panggilan sukses (user memilih aplikasi untuk share)
     } catch (error) {
-      // Menangani jika user membatalkan share (AbortError)
       if ((error as Error).name !== 'AbortError') {
         console.error('Error sharing:', error);
         fallbackCopyToClipboard(shareUrl);
       }
     }
   } else {
-    // 2. Fallback untuk Desktop/Browser yang tidak mendukung Web Share API
+    // 3. Jika di PC / Desktop / Laptop, SELALU jalankan Copy to Clipboard
     fallbackCopyToClipboard(shareUrl);
   }
 };
