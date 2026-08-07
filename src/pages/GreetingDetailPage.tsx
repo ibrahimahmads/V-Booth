@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download, Share2, Sparkles } from 'lucide-react';
 import Button from '../components/atoms/Button';
-
+import { Helmet } from 'react-helmet-async';
 import type { GreetingResponse } from '../types/greeting.types';
 import { downloadGreetingPhoto } from '../utils/helper/download';
 import { shareGreeting } from '../utils/helper/share';
@@ -90,6 +90,43 @@ export default function GreetingDetailPage() {
   // State 3: Tampilan Utama Detail Ucapan
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4 sm:p-6">
+        {greeting && (
+        <Helmet>
+          {/* Judul & Deskripsi Standar Browser */}
+          <title>{`Foto Ucapan dari ${greeting.guestName} - V-Booth`}</title>
+          <meta
+            name="description"
+            content={`Lihat foto ucapan dari ${greeting.guestName} yang dibuat di V-Booth!`}
+          />
+
+          {/* OpenGraph / Facebook / WhatsApp */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={window.location.href} />
+          <meta
+            property="og:title"
+            content={`Foto Ucapan dari ${greeting.guestName} ✨`}
+          />
+          <meta
+            property="og:description"
+            content={`Pesan ucapan dari ${greeting.guestName} pada tanggal ${greeting.tgl} di V-Booth.`}
+          />
+          <meta property="og:image" content={greeting.photoUrl} />
+          <meta property="og:image:width" content="600" />
+          <meta property="og:image:height" content="800" />
+
+          {/* Twitter Card */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta
+            name="twitter:title"
+            content={`Foto Ucapan dari ${greeting.guestName} ✨`}
+          />
+          <meta
+            name="twitter:description"
+            content={`Pesan ucapan dari ${greeting.guestName} di V-Booth.`}
+          />
+          <meta name="twitter:image" content={greeting.photoUrl} />
+        </Helmet>
+      )}
       
       {/* Header Navigasi Atas */}
       <div className="w-full max-w-md mb-4 flex items-center justify-between">
